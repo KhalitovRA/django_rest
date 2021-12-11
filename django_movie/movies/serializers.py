@@ -1,12 +1,13 @@
 from rest_framework import serializers
 
-from .models import Movie, Review
+from .models import *
 
 
 class FilterReviewListSerializer(serializers.ListSerializer):
     def to_representation(self, data):
         data = data.filter(parent=None)
         return super().to_representation(data)
+
 
 class RecursiveSerializer(serializers.Serializer):
 
@@ -48,3 +49,18 @@ class MovieDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         exclude = ('draft', )
+
+
+class CreateRatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rating
+        fields = ('star', 'movie')
+
+        def create(self, validated_data):
+            rating = Rating.objects.update_or_create(
+                ip=validated_data.get('ip', None),
+                movie=validated_data.get('movie', None),
+                defaults={'star': validated_data.get('star')}
+            )
+            return rating
