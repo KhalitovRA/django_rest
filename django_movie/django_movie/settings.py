@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
-
+    'django-filter',
     'movies',
 ]
 
